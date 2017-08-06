@@ -1,9 +1,12 @@
 package tw.brad.app.helloworld.mylayouttest2;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -14,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private String answer;
     private EditText inputEdit;
     private TextView logText;
+    private boolean isWinner;
+    private int counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +27,15 @@ public class MainActivity extends AppCompatActivity {
 
         inputEdit = (EditText) findViewById(R.id.inputText);
         logText = (TextView)findViewById(R.id.logText);
+        initGame();
+    }
+
+    private void initGame(){
         answer = createAnswer(3);
         Log.d("brad", "answer is " + answer);
-
+        isWinner = false;
+        counter = 0;
+        logText.setText("");
     }
 
     // Create Answer
@@ -54,12 +65,42 @@ public class MainActivity extends AppCompatActivity {
 
     public void doGuess(View view){
         // TODO doGuess
+        counter++;
         String guess = inputEdit.getText().toString();
         String result = checkAB(answer, guess);
-        logText.append(guess + " : " + result + "\n");
+        logText.append(counter + ". " + guess + " : " + result + "\n");
         inputEdit.setText("");
 
+        if (result.equals("3A0B")){
+            // Winner
+            isWinner = true;
+            showDialog();
+        }else if (counter == 10){
+            // Loser
+            isWinner = false;
+            showDialog();
+        }
+
     }
+
+    private void showDialog(){
+        AlertDialog dialog = null;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Result");
+        builder.setMessage(isWinner?"Winner":"Loser:" + answer);
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                initGame();
+            }
+        });
+        dialog = builder.create();
+        dialog.show();
+
+    }
+
+
     public void doReset(View view){
         // TODO doReset
     }
