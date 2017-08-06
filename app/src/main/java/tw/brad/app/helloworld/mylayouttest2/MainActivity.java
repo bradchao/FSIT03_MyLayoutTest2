@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         logText.append(counter + ". " + guess + " : " + result + "\n");
         inputEdit.setText("");
 
-        if (result.equals("3A0B")){
+        if (result.equals(dig + "A0B")){
             // Winner
             isWinner = true;
             showDialog();
@@ -127,13 +127,27 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Exit?");
         builder.setCancelable(false);
-        builder.setItems(items, new DialogInterface.OnClickListener() {
+//        builder.setItems(items, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                dig = i + 2;
+//                initGame();
+//            }
+//        });
+
+        builder.setSingleChoiceItems(items, dig - 2, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dig = i + 2;
+            }
+        });
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
                 initGame();
             }
         });
+
 
         dialog = builder.create();
         dialog.show();
