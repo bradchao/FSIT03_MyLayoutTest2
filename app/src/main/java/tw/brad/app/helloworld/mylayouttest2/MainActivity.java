@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView logText;
     private boolean isWinner;
     private int counter;
+    private String[] items = {"2","3","4","5","6","7"};
+    private int dig = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initGame(){
-        answer = createAnswer(3);
+        answer = createAnswer(dig);
         Log.d("brad", "answer is " + answer);
         isWinner = false;
         counter = 0;
@@ -102,13 +105,53 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void doReset(View view){
-        // TODO doReset
+        AlertDialog dialog = null;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Reset?");
+        builder.setMessage("Yes or No");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                initGame();
+            }
+        });
+        builder.setNegativeButton("No", null);
+        dialog = builder.create();
+        dialog.show();
+
     }
     public void doSetting(View view){
-        // TODO doSetting
+        AlertDialog dialog = null;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Exit?");
+        builder.setCancelable(false);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dig = i + 2;
+                initGame();
+            }
+        });
+
+        dialog = builder.create();
+        dialog.show();
     }
     public void doExit(View view){
-        // TODO doExit
+        AlertDialog dialog = null;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Exit?");
+        builder.setMessage("Yes or No");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        builder.setNegativeButton("No", null);
+        dialog = builder.create();
+        dialog.show();
     }
-
 }
